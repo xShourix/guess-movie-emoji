@@ -5,9 +5,7 @@ export default function MovieDatabase() {
     <main>
       <div className="dRowSpacebetween">
         <h1><span className="thinText">Riddle</span> database</h1>
-        <button>
-          <Link to="/add" className="button">Add new</Link>
-        </button>
+        <Link to="/add" className="button">Add new</Link>
       </div>
     </main>
   );
