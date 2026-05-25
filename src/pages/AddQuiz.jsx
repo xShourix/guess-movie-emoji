@@ -1,22 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import EmojiSearch from "../components/EmojiSearch";
 
 export default function AddQuiz() {
-  const [title, setTitle] = useState("");
-  const [emoji, setEmoji] = useState("");
-  const [message, setMessage] = useState("");
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-
-    setMessage("Quiz added! 🎉");
-    setTitle("");
-    setEmoji("");
-  }
-
   return (
     <main>
       <h1><span className="thinText">Add</span> new riddle</h1>
+      <EmojiSearch />
     </main>
   );
 }

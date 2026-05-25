@@ -71,3 +71,34 @@ nav a {
 nav a:hover {
   text-decoration: underline;
 }
+
+/* Search results styles */
+.search-input {
+  padding: 1rem;
+  font-size: 1rem;
+}
+.emoji-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px 0;
+}
+.search-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.emoji-results .search-item {
+  height: 3rem;
+  width: clamp(3rem, 10vw, 5rem);
+}
+.search-item .emoji {
+  font-size: 2rem;
+}
