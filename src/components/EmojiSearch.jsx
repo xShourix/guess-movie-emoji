@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function EmojiSearch() {
+export default function EmojiSearch({ setAnswer }) {
     const [textEmojiSearch, setTextEmojiSearch] = useState("");
     const [emojis, setEmojis] = useState([]);
 
@@ -12,10 +12,18 @@ export default function EmojiSearch() {
             }
             const data = await response.json();
             setEmojis(data);
-            console.log("Fetched emojis:", data);
         } catch (error) {
             console.error("Error fetching emoji:", error);
         }
+    }
+
+    function htmlCodeToEmoji(htmlCode) {
+        return htmlCode
+            .map(code => {
+                const emojiNum = Number(code.replace(/[&#;]/g, ""));
+                return String.fromCodePoint(emojiNum);
+            })
+            .join("");
     }
 
     useEffect(() => {
@@ -30,15 +38,9 @@ export default function EmojiSearch() {
                     .filter((emoji) => emoji.name.toLowerCase().includes(textEmojiSearch.toLowerCase()))
                     .map((emoji) => (
 
-                    <div key={emoji.unicode} className="search-item">
+                    <div key={emoji.unicode} className="search-item" onClick={() => setAnswer(prev => prev + htmlCodeToEmoji(emoji.htmlCode))}>
                         <span className="emoji">
-                            {emoji.htmlCode
-                                .map(code => {
-                                    const emojiNum = Number(code.replace(/[&#;]/g, ""));
-                                    return String.fromCodePoint(emojiNum);
-                                })
-                                .join("")
-                            }
+                            {htmlCodeToEmoji(emoji.htmlCode)}
                         </span>
                     </div>
                 ))}

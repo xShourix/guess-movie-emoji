@@ -6,8 +6,8 @@ https://www.figma.com/proto/YMmu5bOEGpM6wztRb4fnNn/Movie-Emoji?node-id=2-2&p=f&t
 
 <H2>TO DO</H2>
 <ul>
-<li>search for emojis from EmojiHub API</li>
 <li>"add new riddle" section</li>
 <li>database showcase with search</li>
 <li>"guess the movie game" section</li>
+<li>more filter options for emoji search</li>
 </ul>
