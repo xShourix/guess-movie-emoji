@@ -5,9 +5,15 @@ export default function AddQuiz() {
   const [answer, setAnswer] = useState("");
   const [title, setTitle] = useState("");
 
+  async function addPopup(popupText) {
+    const popup = document.createElement("div");
+    popup.id = "popup";
+    popup.innerHTML = "<button onclick={{document.getElementById('popup').remove()}}>X</button><p>"+popupText+"</p>";
+    document.body.appendChild(popup);
+  }
   async function addRiddle() {
     if (title === "" || answer === "") {
-      alert("Please fill in both fields");
+      addPopup("Please fill in both fields");
       return;
     }
     try {
@@ -24,18 +30,18 @@ export default function AddQuiz() {
       );
 
       const data = await response.json();
-      alert(data.success ? "Riddle added successfully!" : "Failed to add riddle");
 
       if (data.success) {
         setTitle("");
         setAnswer("");
+        addPopup("Riddle added successfully!");
       }
       else {
-        alert("Failed to add riddle");
+        addPopup("Failed to add riddle");
       }
     } catch (error) {
       console.error(error);
-      alert("Error adding riddle");
+      addPopup("Error adding riddle");
     }
   }
 
