@@ -1,17 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Popup from "../components/Popup";
 
 export default function MovieDatabase() {
 
   const [titleSearch, setTitleSearch] = useState("");
   const [movies, setMovies] = useState([]);
-
-  async function addPopup(popupText) {
-    const popup = document.createElement("div");
-    popup.id = "popup";
-    popup.innerHTML = "<button onclick={{document.getElementById('popup').remove()}}>X</button><p>"+popupText+"</p>";
-    document.body.appendChild(popup);
-  }
+  const [popupText, setPopupText] = useState("");
 
   async function fetchMovies() {
     try {
@@ -24,14 +19,14 @@ export default function MovieDatabase() {
       );
 
       if (!response.ok) {
-        addPopup("Failed to fetch riddles");
+        setPopupText("Failed to fetch riddles");
         return;
       }
       const data = await response.json();
       setMovies(data);
     } catch (error) {
       console.error(error);
-      addPopup("Error fetching riddles");
+      setPopupText("Error fetching riddles");
     }
   }
 
@@ -41,6 +36,7 @@ export default function MovieDatabase() {
 
   return (
     <main>
+      {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
       <section className="dRowSpacebetween">
         <h1><span className="thinText">Riddle</span> database</h1>
         <Link to="/add" className="button">Add new</Link>

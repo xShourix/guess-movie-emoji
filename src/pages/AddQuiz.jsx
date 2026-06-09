@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
 import EmojiSearch from "../components/EmojiSearch";
+import Popup from "../components/Popup";
 
 export default function AddQuiz() {
   const [answer, setAnswer] = useState("");
   const [title, setTitle] = useState("");
+  const [popupText, setPopupText] = useState("");
 
-  async function addPopup(popupText) {
-    const popup = document.createElement("div");
-    popup.id = "popup";
-    popup.innerHTML = "<button onclick={{document.getElementById('popup').remove()}}>X</button><p>"+popupText+"</p>";
-    document.body.appendChild(popup);
-  }
   async function addRiddle() {
     if (title === "" || answer === "") {
-      addPopup("Please fill in both fields");
+      setPopupText("Please fill in both fields");
       return;
     }
     try {
@@ -30,21 +26,22 @@ export default function AddQuiz() {
       );
 
       if (!response.ok) {
-        addPopup("Failed to add riddle");
+        setPopupText("Failed to add riddle");
       }
       else {
         setTitle("");
         setAnswer("");
-        addPopup("Riddle added successfully!");
+        setPopupText("Riddle added successfully!");
       }
     } catch (error) {
       console.error(error);
-      addPopup("Error adding riddle");
+      setPopupText("Error adding riddle");
     }
   }
 
   return (
     <main>
+      {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
       <h1><span className="thinText">Add</span> new riddle</h1>
       <input id="emoji-input" type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="✍🏼🎥💬..." className="emoji-input" />
       <div className="dRowCenter">
