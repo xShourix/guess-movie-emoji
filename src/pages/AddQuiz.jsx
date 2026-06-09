@@ -29,15 +29,13 @@ export default function AddQuiz() {
         }
       );
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (!response.ok) {
+        addPopup("Failed to add riddle");
+      }
+      else {
         setTitle("");
         setAnswer("");
         addPopup("Riddle added successfully!");
-      }
-      else {
-        addPopup("Failed to add riddle");
       }
     } catch (error) {
       console.error(error);

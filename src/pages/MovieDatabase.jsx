@@ -6,19 +6,36 @@ export default function MovieDatabase() {
   const [titleSearch, setTitleSearch] = useState("");
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    async function fetchMovies() {
-      try {
-        const response = await fetch("http://localhost:3000/movies");
-        if (!response.ok) {
-          throw new Error("Could not fetch movies");
+  async function addPopup(popupText) {
+    const popup = document.createElement("div");
+    popup.id = "popup";
+    popup.innerHTML = "<button onclick={{document.getElementById('popup').remove()}}>X</button><p>"+popupText+"</p>";
+    document.body.appendChild(popup);
+  }
+
+  async function fetchMovies() {
+    try {
+      const response = await fetch("http://localhost/guess-movie-emoji/api/riddleApi.php",{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
         }
-        const data = await response.json();
-        setMovies(data);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
+      );
+
+      if (!response.ok) {
+        addPopup("Failed to fetch riddles");
+        return;
       }
+      const data = await response.json();
+      setMovies(data);
+    } catch (error) {
+      console.error(error);
+      addPopup("Error fetching riddles");
     }
+  }
+
+  useEffect(() => {
     fetchMovies();
   }, []);
 
@@ -30,14 +47,14 @@ export default function MovieDatabase() {
       </section>
       <section className="movieDatabase">
         <input className="search-input" type="text" placeholder="Search..." value={titleSearch} onChange={e => setTitleSearch(e.target.value)} />
-        <div className="movieResults">
+        <div className="movie-results">
           {movies
             .filter(movie => movie.title.toLowerCase().includes(titleSearch.toLowerCase()))
             .map(movie => (
-              <Link to={`/movie/${movie.id}`} key={movie.id} className="search-item">
-                <h2>{movie.title}</h2>
-                <p>{movie.year}</p>
-              </Link>
+              <div key={movie.id} className="search-item">
+                <span className="answer">{movie.answer}</span>
+                <h3>{movie.title}</h3>
+              </div>
             ))}
         </div>
       </section>
