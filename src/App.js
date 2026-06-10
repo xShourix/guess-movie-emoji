@@ -2,7 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import Home from "./pages/Home";
 import MovieDatabase from "./pages/MovieDatabase";
-import AddQuiz from "./pages/AddQuiz";
+import HandleRiddle from "./pages/HandleRiddle";
 
 function App() {
   return (
@@ -17,7 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/movie-database" element={<MovieDatabase />} />
-        <Route path="/add" element={<AddQuiz />} />
+        <Route path="/add" element={<HandleRiddle />} />
+        <Route path="/edit/:id" element={<HandleRiddle />} />
       </Routes>
     </div>
   );

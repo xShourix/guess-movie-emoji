@@ -10,6 +10,11 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 switch($_SERVER['REQUEST_METHOD']) {
     case "GET":
+        if (isset($_GET['id'])) {
+            $result = $conn->query("SELECT * FROM riddles WHERE id={$_GET['id']}");
+            echo json_encode($result->fetch_assoc());
+            break;
+        }
         $result = $conn->query("SELECT * FROM riddles");
         $riddles = [];
         while ($row = $result->fetch_assoc()) {
