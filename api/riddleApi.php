@@ -10,11 +10,46 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 switch($_SERVER['REQUEST_METHOD']) {
     case "GET":
+        // If count parametr is provided, return number of riddles
+        if (isset($_GET['count'])) {
+            $result = $conn->query("SELECT COUNT(*) as count FROM riddles");
+            echo json_encode($result->fetch_assoc());
+            break;
+        }
+        // If an ID is provided, return the specific riddle
         if (isset($_GET['id'])) {
             $result = $conn->query("SELECT * FROM riddles WHERE id={$_GET['id']}");
             echo json_encode($result->fetch_assoc());
             break;
         }
+        // If exclude parameter is provided and not empty, return a random riddle excluding the specified IDs
+        if (isset($_GET['exclude']) && $_GET['exclude'] !== '') {
+            $databaseCount = $conn->query("SELECT COUNT(*) as count FROM riddles")->fetch_assoc()['count'];
+            $excludeCount = count(explode(",", $_GET['exclude']));
+
+            if($databaseCount == 0) {
+                echo json_encode([
+                    "empty" => true
+                ]);
+                break;
+            }
+            if($databaseCount <= $excludeCount) {
+                echo json_encode([
+                    "finished" => true
+                ]);
+                break;
+            }
+            $result = $conn->query("SELECT * FROM riddles WHERE id NOT IN ({$_GET['exclude']}) ORDER BY RAND() LIMIT 1");
+            echo json_encode($result->fetch_assoc());
+            break;
+        }
+        // If exclude parameter is provided but empty, return a random riddle
+        else if (isset($_GET['exclude']) && $_GET['exclude'] === '') {
+            $result = $conn->query("SELECT * FROM riddles ORDER BY RAND() LIMIT 1");
+            echo json_encode($result->fetch_assoc());
+            break;
+        }
+        // If no specific ID or exclude list is provided, return all riddles
         $result = $conn->query("SELECT * FROM riddles");
         $riddles = [];
         while ($row = $result->fetch_assoc()) {
