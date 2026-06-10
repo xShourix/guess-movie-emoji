@@ -32,13 +32,16 @@ export default function EmojiSearch({ setAnswer }) {
 
     return (
         <section>
-            <input className="search-input" type="text" placeholder="Search for an emoji..." value={textEmojiSearch} onChange={e => setTextEmojiSearch(e.target.value)} />
+            <div className="w100">
+                <h3>Click emoji to add it</h3>
+                <input className="search-input" type="text" placeholder="Search for an emoji..." value={textEmojiSearch} onChange={e => setTextEmojiSearch(e.target.value)} />
+            </div>
             <div className="emoji-results">
                 {emojis
                     .filter((emoji) => emoji.name.toLowerCase().includes(textEmojiSearch.toLowerCase()))
                     .map((emoji) => (
 
-                    <div key={emoji.unicode} className="search-item" onClick={() => setAnswer(prev => prev + htmlCodeToEmoji(emoji.htmlCode))}>
+                    <div key={emoji.unicode} className="search-item interactive" onClick={() => setAnswer(prev => prev + htmlCodeToEmoji(emoji.htmlCode))}>
                         <span className="emoji">
                             {htmlCodeToEmoji(emoji.htmlCode)}
                         </span>

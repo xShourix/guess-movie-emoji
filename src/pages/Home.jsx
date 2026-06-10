@@ -1,3 +1,4 @@
+import { text } from "@fortawesome/fontawesome-svg-core";
 import { useState, useEffect } from "react";
 import { useRef } from "react";
 
@@ -79,7 +80,7 @@ export default function Home() {
 
   return (
     <main>
-      <h1><span className="thinText">Guess</span> the movie<br/><span className="thinText">based on</span> emojis</h1>
+      <h1 className="textCenter"><span className="thinText">Guess</span> the movie<br/><span className="thinText">based on</span> emojis</h1>
       <hr />
         {riddleCount != 0 ?
           (
@@ -92,14 +93,14 @@ export default function Home() {
                     <button className="primary-button" onClick={() => checkAnswer(inputRef.current.value)}>Check</button>
                   </div>
                 ) : (
-                  <div>
+                  <div className="textCenter">
                     <h2 className="riddleTitle"><span className="thinText">The title:</span> {riddle.title}</h2>
                     {win ? <p>You got it!</p> : <p>Maybe next time!</p>}
                   </div>
                 )}
               </section>
               <hr />
-              <section>
+              <section className="dRowEnd">
                   <button className="primary-button" onClick={() => {
                       setWin(false);
                       setMode(mode === "play" ? "answer" : "play")

@@ -64,10 +64,11 @@ export default function MovieDatabase() {
   return (
     <main>
       {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
-      <section className="dRowSpacebetween">
+      <div className="dRowSpacebetween">
         <h1><span className="thinText">Riddle</span> database</h1>
         <Link to="/add" className="button">Add new</Link>
-      </section>
+      </div>
+      <hr />
       <section className="movieDatabase">
         <input className="search-input" type="text" placeholder="Search..." value={titleSearch} onChange={e => setTitleSearch(e.target.value)} />
         <div className="movie-results">
@@ -82,8 +83,8 @@ export default function MovieDatabase() {
                   <div className="item-menu-container">
                     <FontAwesomeIcon className="item-menu-icon" icon={faEllipsisVertical} />
                     <ul className="item-menu">
-                      <li><Link to={`/edit/${movie.id}`}>Edit</Link></li>
-                      <li onClick={() => deleteRiddle(movie.id)}>Delete</li>
+                      <li><Link to={`/edit/${movie.id}`}className="thinText">Edit</Link></li>
+                      <li onClick={() => deleteRiddle(movie.id)}><span className="thinText">Delete</span></li>
                     </ul>
                   </div>
                   <span className="answer">{movie.answer}</span>
