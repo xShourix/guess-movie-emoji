@@ -2,6 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 
 $conn = new mysqli("localhost", "root", "", "emoji_quiz");
 
@@ -30,6 +31,37 @@ switch($_SERVER['REQUEST_METHOD']) {
             echo json_encode([
                 "success" => false,
                 "message" => "Adding riddle failed: " . $conn->error
+            ]);
+        }
+        break;
+    case "PUT":
+        $result = $conn->query(
+            "UPDATE riddles SET title='{$data['title']}', answer='{$data['answer']}'
+            WHERE id={$data['id']}"
+        );
+
+        if ($result) {
+            echo json_encode([
+                "success" => true
+            ]);
+        } else {
+            echo json_encode([
+                "success" => false,
+                "message" => "Updating riddle failed: " . $conn->error
+            ]);
+        }
+        break;
+    case "DELETE":
+        $result = $conn->query("DELETE FROM riddles WHERE id={$data['id']}");
+
+        if ($result) {
+            echo json_encode([
+                "success" => true
+            ]);
+        } else {
+            echo json_encode([
+                "success" => false,
+                "message" => "Deleting riddle failed: " . $conn->error
             ]);
         }
         break;
