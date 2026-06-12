@@ -56,7 +56,7 @@ export default function MovieDatabase() {
       const data = await response.json();
       setMovies(data.riddles);
       setTotalPages(data.pages);
-      if(data.pages < currentPage) {
+      if(data.pages > 0 && data.pages < currentPage) {
         setCurrentPage(data.pages);
       }
     } catch (error) {
