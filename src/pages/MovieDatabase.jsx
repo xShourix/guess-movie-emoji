@@ -11,7 +11,7 @@ export default function MovieDatabase() {
   const [movies, setMovies] = useState([]);
   
   const [titleSearch, setTitleSearch] = useState("");
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -56,6 +56,9 @@ export default function MovieDatabase() {
       const data = await response.json();
       setMovies(data.riddles);
       setTotalPages(data.pages);
+      if(data.pages < currentPage) {
+        setCurrentPage(data.pages);
+      }
     } catch (error) {
       console.error(error);
       setPopupText("Error fetching riddles");
@@ -102,31 +105,33 @@ export default function MovieDatabase() {
               )))
             }
         </div>
-        <div className="dRowSpacebetween">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(prev => prev - 1)}
-          >
-            Previous
-          </button>
-          <p>
-            {currentPage > 2 && <span>1 </span>}
-            {currentPage > 3 && <span>... </span>}
-            {currentPage > 1 && <span>{currentPage - 1} </span>}
+        { totalPages !== 0 &&
+          <div className="dRowSpacebetween">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(prev => prev - 1)}
+            >
+              Previous
+            </button>
+            <p>
+              {currentPage > 2 && <span>1 </span>}
+              {currentPage > 3 && <span>... </span>}
+              {currentPage > 1 && <span>{currentPage - 1} </span>}
 
-            <b>{currentPage}</b>
+              <b>{currentPage}</b>
 
-            {currentPage < totalPages && <span> {currentPage + 1}</span>}
-            {currentPage < totalPages - 2 && <span> ...</span>}
-            {currentPage < totalPages - 1 && <span> {totalPages}</span>}
-          </p>
+              {currentPage < totalPages && <span> {currentPage + 1}</span>}
+              {currentPage < totalPages - 2 && <span> ...</span>}
+              {currentPage < totalPages - 1 && <span> {totalPages}</span>}
+            </p>
 
-          <button disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(prev => prev + 1)}
-          >
-            Next
-          </button>
-        </div>
+            <button disabled={currentPage === totalPages || totalPages === 0}
+              onClick={() => setCurrentPage(prev => prev + 1)}
+            >
+              Next
+            </button>
+          </div>
+        }
       </section>
     </main>
   );
