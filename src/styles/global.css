@@ -32,6 +32,13 @@ section {
   flex-direction: column;
   justify-content: center;
   gap: 20px;
+  margin: 20px 0;
+}
+section h2 {
+  margin: 0.5rem 0;
+}
+section h3 {
+  margin: 0;
 }
 
 /* Text Styles */
@@ -79,7 +86,16 @@ button:hover, .button:hover {
 button a, .button a {
   color: var(--background-color);
 }
+.buttonCategories::first-letter {
+  text-transform: capitalize;
+}
 
+.dRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
 .dRowCenter {
   display: flex;
   flex-direction: row;
