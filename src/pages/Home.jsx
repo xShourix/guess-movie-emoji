@@ -68,10 +68,13 @@ export default function Home() {
   useEffect(() => {
     async function load() {
       const count = await checkRiddleCount();
-      setRiddleCount(count);
 
       if (count > 0) {
+        setRiddleCount(count);
         fetchRiddle([]);
+      }
+      else {
+        setRiddleCount(0);
       }
     }
 
@@ -82,7 +85,7 @@ export default function Home() {
     <main>
       <h1 className="textCenter"><span className="thinText">Guess</span> the movie<br/><span className="thinText">based on</span> emojis</h1>
       <hr />
-        {riddleCount != 0 ?
+        {riddleCount > 0 ?
           (
             <>
               <section>
