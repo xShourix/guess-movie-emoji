@@ -1,4 +1,3 @@
-import { text } from "@fortawesome/fontawesome-svg-core";
 import { useState, useEffect } from "react";
 import { useRef } from "react";
 
@@ -42,16 +41,16 @@ export default function Home() {
         return;
       }
 
-      setRiddle(data);
-      setSeenIds([...ids, data.id]);
-
+      setRiddle(data.riddle);
+      setSeenIds([...ids, data.riddle.id]);
+      console.log(data.riddle);
     } catch (error) {
       console.error("Error fetching riddle:", error);
     }
   }
 
   function checkAnswer(userAnswer) {
-    if (userAnswer.toLowerCase() === riddle.title.toLowerCase()) {
+    if (riddle.title && userAnswer.toLowerCase() === riddle.title.toLowerCase()) {
       setWin(true);
       setMode("answer");
       inputRef.current.value = "";

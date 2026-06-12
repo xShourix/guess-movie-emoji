@@ -40,13 +40,18 @@ switch($_SERVER['REQUEST_METHOD']) {
                 break;
             }
             $result = $conn->query("SELECT * FROM riddles WHERE id NOT IN ({$_GET['exclude']}) ORDER BY RAND() LIMIT 1");
-            echo json_encode($result->fetch_assoc());
+            echo json_encode([
+                "finished" => false,
+                "riddle" => $result->fetch_assoc()
+            ]);
             break;
         }
         // If exclude parameter is provided but empty, return a random riddle
         else if (isset($_GET['exclude']) && $_GET['exclude'] === '') {
             $result = $conn->query("SELECT * FROM riddles ORDER BY RAND() LIMIT 1");
-            echo json_encode($result->fetch_assoc());
+            echo json_encode([ 
+                "riddle" => $result->fetch_assoc()
+            ]);
             break;
         }
         // If no specific ID or exclude list is provided, return all riddles
