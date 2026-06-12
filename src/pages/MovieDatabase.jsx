@@ -70,8 +70,8 @@ export default function MovieDatabase() {
       </div>
       <hr />
       <section className="movieDatabase">
-        <input className="search-input" type="text" placeholder="Search..." value={titleSearch} onChange={e => setTitleSearch(e.target.value)} />
-        <div className="movie-results">
+        <input type="text" placeholder="Search..." value={titleSearch} onChange={e => setTitleSearch(e.target.value)} />
+        <div className="movieResults">
           {(movies && (movies.length === 0 || movies .filter(movie => movie.title.toLowerCase().includes(titleSearch.toLowerCase())).length === 0))
             ? (
               <p>No riddles found.</p>
@@ -79,10 +79,10 @@ export default function MovieDatabase() {
             : (movies
               .filter(movie => movie.title.toLowerCase().includes(titleSearch.toLowerCase()))
               .map(movie => (
-                <div key={movie.id} className="search-item">
-                  <div className="item-menu-container">
-                    <FontAwesomeIcon className="item-menu-icon" icon={faEllipsisVertical} />
-                    <ul className="item-menu">
+                <div key={movie.id} className="searchItem">
+                  <div className="itemMenuContainer">
+                    <FontAwesomeIcon className="itemMenuIcon" icon={faEllipsisVertical} />
+                    <ul className="itemMenu">
                       <li><Link to={`/edit/${movie.id}`}className="thinText">Edit</Link></li>
                       <li onClick={() => deleteRiddle(movie.id)}><span className="thinText">Delete</span></li>
                     </ul>

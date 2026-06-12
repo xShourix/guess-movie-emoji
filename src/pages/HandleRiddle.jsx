@@ -108,19 +108,22 @@ export default function HandleRiddle() {
       {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
       <h1>{isEdit ? <span className="thinText">Edit</span> : <span className="thinText">Add</span>} a riddle</h1>
       <hr />
-      
-      <div>
-        {isEdit && 
-          <h2>Quiz id: {id}</h2>
-        }
-        <h2>Riddle:</h2>
-        <input id="emoji-input" type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="✍🏼🎥💬..." className="emoji-input" />
-      </div>
-      <div className="dRowCenter">
-        <h2>Title:</h2>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Type movie title..." className="search-input" />  
+      <section>
+        <div>
+          {isEdit && 
+            <h2>Quiz id: <span className="thinText">{id}</span></h2>
+          }
+          <label>
+            <h2>Riddle</h2>
+            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="✍🏼🎥💬..." className="w100" />
+          </label>
+          <label>
+            <h2>Title</h2>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Type movie title..." className="w100" /> 
+          </label>
+        </div>
         {isEdit ? (<input type="button" value="Update" className="button" onClick={updateRiddle} />) : (<input type="button" value="Add" className="button" onClick={addRiddle} />)}
-      </div>
+      </section>
       <EmojiSearch setAnswer={setAnswer} />
     </main>
   );

@@ -57,10 +57,10 @@ export default function Home() {
       inputRef.current.value = "";
     }
     else {
-      inputRef.current.classList.add("wrong-answer");
+      inputRef.current.classList.add("wrongAnswer");
 
       setTimeout(() => {
-        inputRef.current.classList.remove("wrong-answer");
+        inputRef.current.classList.remove("wrongAnswer");
       }, 500);
     }
   }
@@ -89,10 +89,10 @@ export default function Home() {
           (
             <>
               <section>
-                <h1 className="riddleAnswer">{riddle.answer}</h1>
+                <h1 className="textCenter">{riddle.answer}</h1>
                 {mode === "play" ? (
                   <div className="dRowCenter">
-                    <input type="text" placeholder="Type your answer here..." className="search-input" id="answerInput" ref={inputRef} />
+                    <input type="text" placeholder="Type your answer here..."  ref={inputRef} />
                     <button className="primary-button" onClick={() => checkAnswer(inputRef.current.value)}>Check</button>
                   </div>
                 ) : (
