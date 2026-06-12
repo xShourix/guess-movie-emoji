@@ -17,13 +17,13 @@ switch($_SERVER['REQUEST_METHOD']) {
             break;
         }
         // If an ID is provided, return the specific riddle
-        if (isset($_GET['id'])) {
+        else if (isset($_GET['id'])) {
             $result = $conn->query("SELECT * FROM riddles WHERE id={$_GET['id']}");
             echo json_encode($result->fetch_assoc());
             break;
         }
         // If exclude parameter is provided and not empty, return a random riddle excluding the specified IDs
-        if (isset($_GET['exclude']) && $_GET['exclude'] !== '') {
+        else if (isset($_GET['exclude']) && $_GET['exclude'] !== '') {
             $databaseCount = $conn->query("SELECT COUNT(*) as count FROM riddles")->fetch_assoc()['count'];
             $excludeCount = count(explode(",", $_GET['exclude']));
 
@@ -51,6 +51,39 @@ switch($_SERVER['REQUEST_METHOD']) {
             $result = $conn->query("SELECT * FROM riddles ORDER BY RAND() LIMIT 1");
             echo json_encode([ 
                 "riddle" => $result->fetch_assoc()
+            ]);
+            break;
+        }
+        // If page and limit parametr is provided, return slice of data which fits to requirements
+        else if ((isset($_GET['page'])) && isset($_GET['limit'])) {
+            $page = (int) $_GET['page'];
+            $limit = (int) $_GET['limit'];
+            $offset = ($page - 1) * $limit;
+            
+            $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : "";
+            
+            $total = $conn->query("
+                SELECT COUNT(*) AS count
+                FROM riddles
+                WHERE title LIKE '%$search%'
+            ")->fetch_assoc()['count'];
+
+            $result = $conn->query("
+                SELECT *
+                FROM riddles
+                WHERE title LIKE '%$search%'
+                LIMIT $limit OFFSET $offset
+            ");
+            
+            $riddles = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $riddles[] = $row;
+            }
+
+            echo json_encode([
+                "riddles" => $riddles,
+                "pages" => ceil($total / $limit)
             ]);
             break;
         }

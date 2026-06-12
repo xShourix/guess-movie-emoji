@@ -8,8 +8,12 @@ export default function MovieDatabase() {
 
   const [popupText, setPopupText] = useState("");
 
-  const [titleSearch, setTitleSearch] = useState("");
   const [movies, setMovies] = useState([]);
+  
+  const [titleSearch, setTitleSearch] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   async function deleteRiddle(movieId) {
     try {
@@ -37,7 +41,7 @@ export default function MovieDatabase() {
 
   async function fetchMovies() {
     try {
-      const response = await fetch("http://localhost/guess-movie-emoji/api/riddleApi.php",{
+      const response = await fetch(`http://localhost/guess-movie-emoji/api/riddleApi.php?page=${currentPage}&limit=${itemsPerPage}&search=${titleSearch}`,{
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +54,8 @@ export default function MovieDatabase() {
         return;
       }
       const data = await response.json();
-      setMovies(data);
+      setMovies(data.riddles);
+      setTotalPages(data.pages);
     } catch (error) {
       console.error(error);
       setPopupText("Error fetching riddles");
@@ -59,7 +64,7 @@ export default function MovieDatabase() {
 
   useEffect(() => {
     fetchMovies();
-  }, []);
+  }, [titleSearch, currentPage]);
 
   return (
     <main>
@@ -70,14 +75,18 @@ export default function MovieDatabase() {
       </div>
       <hr />
       <section className="movieDatabase">
-        <input type="text" placeholder="Search..." value={titleSearch} onChange={e => setTitleSearch(e.target.value)} />
+        <input type="text" value={titleSearch} placeholder="Search..." 
+          onChange={e => {
+            setTitleSearch(e.target.value);
+            setCurrentPage(1);
+          }} 
+        />
         <div className="movieResults">
-          {(movies && (movies.length === 0 || movies .filter(movie => movie.title.toLowerCase().includes(titleSearch.toLowerCase())).length === 0))
+          {(movies && movies.length === 0)
             ? (
               <p>No riddles found.</p>
             )
             : (movies
-              .filter(movie => movie.title.toLowerCase().includes(titleSearch.toLowerCase()))
               .map(movie => (
                 <div key={movie.id} className="searchItem">
                   <div className="itemMenuContainer">
@@ -92,6 +101,31 @@ export default function MovieDatabase() {
                 </div>
               )))
             }
+        </div>
+        <div className="dRowSpacebetween">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => prev - 1)}
+          >
+            Previous
+          </button>
+          <p>
+            {currentPage > 2 && <span>1 </span>}
+            {currentPage > 3 && <span>... </span>}
+            {currentPage > 1 && <span>{currentPage - 1} </span>}
+
+            <b>{currentPage}</b>
+
+            {currentPage < totalPages && <span> {currentPage + 1}</span>}
+            {currentPage < totalPages - 2 && <span> ...</span>}
+            {currentPage < totalPages - 1 && <span> {totalPages}</span>}
+          </p>
+
+          <button disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => prev + 1)}
+          >
+            Next
+          </button>
         </div>
       </section>
     </main>

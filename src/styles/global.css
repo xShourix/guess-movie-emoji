@@ -86,6 +86,13 @@ button:hover, .button:hover {
 button a, .button a {
   color: var(--background-color);
 }
+button:disabled, .button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+button:disabled:hover, .button:disabled:hover {
+  background-color: var(--text-color);
+}
 .buttonCategories::first-letter {
   text-transform: capitalize;
 }
@@ -180,12 +187,28 @@ nav a:hover {
   margin: 20px 0;
 }
 .movieResults {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin: 20px 0;
+}
+/* tablets */
+@media (max-width: 1200px) {
+  .movieResults {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+/* small tablets / large phones */
+@media (max-width: 900px) {
+  .movieResults {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* phones */
+@media (max-width: 600px) {
+  .movieResults {
+    grid-template-columns: 1fr;
+  }
 }
 .searchItem {
   display: flex;
