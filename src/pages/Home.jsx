@@ -94,14 +94,16 @@ export default function Home() {
                 <h1 className="textCenter">{riddle.answer}</h1>
                 {mode === "play" ? (
                   <div className="dRowCenter">
-                    <input type="text" placeholder="Type your answer here..." value={userAnswer} onChange={(e) => setUserAnswer(e.target.value)} className={wrongAnswer ? "wrongAnswer" : ""} />
-                    <button className="primary-button" 
-                      onClick={() => checkAnswer(userAnswer)} 
+                    <input type="text" placeholder="Type your answer here..." value={userAnswer} 
+                      onChange={(e) => setUserAnswer(e.target.value)} 
                       onKeyDown={(e) => {
                         if(e.key === "Enter") {
                           checkAnswer(userAnswer);
                         }
-                      }}>Check</button>
+                      }}
+                      className={wrongAnswer ? "wrongAnswer" : ""} 
+                    />
+                    <button className="primary-button" onClick={() => checkAnswer(userAnswer)}>Check</button>
                   </div>
                 ) : (
                   <div className="textCenter">
