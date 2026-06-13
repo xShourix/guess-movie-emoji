@@ -96,7 +96,7 @@ export default function MovieDatabase() {
                     <FontAwesomeIcon className="itemMenuIcon" icon={faEllipsisVertical} />
                     <ul className="itemMenu">
                       <li><Link to={`/edit/${movie.id}`}className="thinText">Edit</Link></li>
-                      <li onClick={() => deleteRiddle(movie.id)}><span className="thinText">Delete</span></li>
+                      <li onClick={() => {deleteRiddle(movie.id); setPopupText("Riddle deleted")}}><span className="thinText">Delete</span></li>
                     </ul>
                   </div>
                   <span className="answer">{movie.answer}</span>
