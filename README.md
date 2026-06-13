@@ -8,6 +8,5 @@ https://www.figma.com/proto/YMmu5bOEGpM6wztRb4fnNn/Movie-Emoji?node-id=2-2&p=f&t
 <ul>
 <li>authentication</li>
 <li>popup when you want to leave edit mode without saving data</li>
-<li>search function with navigation, not showing all search items at once</li>
-<li>more filter options for emoji search</li>
+<li>prevent double clicks => loading state for promises</li>
 </ul>

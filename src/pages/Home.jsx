@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
-import { useRef } from "react";
 
 export default function Home() {
   const [mode, setMode] = useState("play");
-  const [win, setWin] = useState(false);
   const [seenIds, setSeenIds] = useState([]);
   const [riddleCount, setRiddleCount] = useState(0);
 
   const [riddle, setRiddle] = useState({});
 
-  const inputRef = useRef();
+  const [userAnswer, setUserAnswer] = useState("");
+  const [wrongAnswer, setWrongAnswer] = useState(false);
 
   async function checkRiddleCount(){
     try {
@@ -37,6 +36,12 @@ export default function Home() {
       if (data.finished) {
         const lastId = ids[ids.length - 1];
         setSeenIds([]);
+
+        if (lastId == null) {
+          fetchRiddle([]);
+          return;
+        }
+        
         fetchRiddle([lastId]);
         return;
       }
@@ -49,16 +54,15 @@ export default function Home() {
   }
 
   function checkAnswer(userAnswer) {
-    if (riddle.title && userAnswer.toLowerCase() === riddle.title.toLowerCase()) {
-      setWin(true);
-      setMode("answer");
-      inputRef.current.value = "";
+    if (riddle.title && userAnswer.trim().toLowerCase() === riddle.title.trim().toLowerCase()) {
+      setMode("win");
+      setUserAnswer("");
     }
     else {
-      inputRef.current.classList.add("wrongAnswer");
+      setWrongAnswer(true);
 
       setTimeout(() => {
-        inputRef.current.classList.remove("wrongAnswer");
+        setWrongAnswer(false);
       }, 500);
     }
   }
@@ -90,26 +94,31 @@ export default function Home() {
                 <h1 className="textCenter">{riddle.answer}</h1>
                 {mode === "play" ? (
                   <div className="dRowCenter">
-                    <input type="text" placeholder="Type your answer here..."  ref={inputRef} />
-                    <button className="primary-button" onClick={() => checkAnswer(inputRef.current.value)}>Check</button>
+                    <input type="text" placeholder="Type your answer here..." value={userAnswer} onChange={(e) => setUserAnswer(e.target.value)} className={wrongAnswer ? "wrongAnswer" : ""} />
+                    <button className="primary-button" 
+                      onClick={() => checkAnswer(userAnswer)} 
+                      onKeyDown={(e) => {
+                        if(e.key === "Enter") {
+                          checkAnswer(userAnswer);
+                        }
+                      }}>Check</button>
                   </div>
                 ) : (
                   <div className="textCenter">
                     <h2 className="riddleTitle"><span className="thinText">The title:</span> {riddle.title}</h2>
-                    {win ? <p>You got it!</p> : <p>Maybe next time!</p>}
+                    {mode === "win" ? <p>You got it!</p> : <p>Maybe next time!</p>}
                   </div>
                 )}
               </section>
               <hr />
               <section className="dRowEnd">
                   <button className="primary-button" onClick={() => {
-                      setWin(false);
                       setMode(mode === "play" ? "answer" : "play")
                     }}>
                     {mode === "play" ? "Show answer" : "Hide answer"}
                   </button>
                   {riddleCount > 1 
-                    && <button className="primary-button" onClick={() => {setWin(false); setMode("play"); fetchRiddle(seenIds);}}>Next riddle</button>
+                    && <button className="primary-button" onClick={() => {setMode("play"); fetchRiddle(seenIds);}}>Next riddle</button>
                   }
               </section>
             </>
