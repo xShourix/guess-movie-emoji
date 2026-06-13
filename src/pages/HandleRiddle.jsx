@@ -34,35 +34,60 @@ export default function HandleRiddle() {
       }
   }
 
-  async function addRiddle() {
-    if (title === "" || answer === "") {
+  async function saveRiddle() {
+    if (title.trim() === "" || answer.trim() === "") {
       setPopupText("Please fill in both fields");
       return;
     }
     try {
-      const response = await fetch("http://localhost/guess-movie-emoji/api/riddleApi.php",{
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title,
-            answer,
-          }),
-        }
-      );
+      let response;
+      if (isEdit) {
+        response = await fetch(
+          "http://localhost/guess-movie-emoji/api/riddleApi.php",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id,
+              title,
+              answer,
+            }),
+          }
+        );
+      } else {
+        response = await fetch(
+          "http://localhost/guess-movie-emoji/api/riddleApi.php",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              answer,
+            }),
+          }
+        );
+      }
 
       if (!response.ok) {
-        setPopupText("Failed to add riddle");
+        setPopupText(isEdit ? "Failed to edit riddle" : "Failed to add riddle");
+        return;
       }
-      else {
+
+      if (!isEdit) {
         setTitle("");
         setAnswer("");
         setPopupText("Riddle added successfully!");
       }
+      else {
+        setPopupText("Riddle edited successfully!");
+      }
     } catch (error) {
       console.error(error);
-      setPopupText("Error adding riddle");
+      setPopupText(isEdit ? "Error editing riddle" : "Error adding riddle");
     }
   }
 
@@ -92,7 +117,7 @@ export default function HandleRiddle() {
       setPopupText("Riddle edited successfully!");
     } catch (error) {
       console.error(error);
-      setPopupText("Error editting riddle");
+      setPopupText("Error editing riddle");
     }
   }
 
@@ -106,9 +131,9 @@ export default function HandleRiddle() {
   return (
     <main>
       {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
-      <h1>{isEdit ? <span className="thinText">Edit</span> : <span className="thinText">Add</span>} a riddle</h1>
+      <h1><span className="thinText">{isEdit ? "Edit" : "Add"}</span>{" "}a riddle</h1>
       <hr />
-      <section>
+      <form onSubmit={(e) => { e.preventDefault(); saveRiddle(); }}>
         <div>
           {isEdit && 
             <h2>Quiz id: <span className="thinText">{id}</span></h2>
@@ -122,8 +147,10 @@ export default function HandleRiddle() {
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Type movie title..." className="w100" /> 
           </label>
         </div>
-        {isEdit ? (<input type="button" value="Update" className="button" onClick={updateRiddle} />) : (<input type="button" value="Add" className="button" onClick={addRiddle} />)}
-      </section>
+        <button type="submit" className="button">
+          {isEdit ? "Update" : "Add"}
+        </button>
+      </form>
       <EmojiSearch setAnswer={setAnswer} />
     </main>
   );

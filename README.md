@@ -9,4 +9,5 @@ https://www.figma.com/proto/YMmu5bOEGpM6wztRb4fnNn/Movie-Emoji?node-id=2-2&p=f&t
 <li>authentication</li>
 <li>popup when you want to leave edit mode without saving data</li>
 <li>prevent double clicks => loading state for promises</li>
+<li>normalize movie titles - spider man = spider-man </li>
 </ul>
