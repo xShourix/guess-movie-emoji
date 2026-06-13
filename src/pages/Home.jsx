@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+import Popup from "../components/Popup";
 
 export default function Home() {
+  const [popupText, setPopupText] = useState("");
+
   const [mode, setMode] = useState("play");
   const [seenIds, setSeenIds] = useState([]);
   const [riddleCount, setRiddleCount] = useState(0);
@@ -15,6 +18,11 @@ export default function Home() {
       const response = await fetch(
         "http://localhost/guess-movie-emoji/api/riddleApi.php?count=true"
       );
+      
+      if (!response.ok) {
+        setPopupText("Error checking riddle count");
+        return;
+      }
 
       const data = await response.json();
       return data.count;
@@ -30,8 +38,12 @@ export default function Home() {
         "http://localhost/guess-movie-emoji/api/riddleApi.php?exclude=" +
         ids.join(",")
       );
-
       const data = await response.json();
+
+      if (!response.ok) {
+        setPopupText("Error fetching riddle");
+        return;
+      }
 
       if (data.finished) {
         const lastId = ids[ids.length - 1];
@@ -85,6 +97,7 @@ export default function Home() {
 
   return (
     <main>
+      {popupText && <Popup popupText={popupText} setPopupText={setPopupText} />}
       <h1 className="textCenter"><span className="thinText">Guess</span> the movie<br/><span className="thinText">based on</span> emojis</h1>
       <hr />
         {riddleCount > 0 ?
