@@ -43,7 +43,6 @@ export default function Home() {
 
       setRiddle(data.riddle);
       setSeenIds([...ids, data.riddle.id]);
-      console.log(data.riddle);
     } catch (error) {
       console.error("Error fetching riddle:", error);
     }
